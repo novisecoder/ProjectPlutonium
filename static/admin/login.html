@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Login | ProjectPlutonium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">ProjectPlutonium</a>
+      </div>
+    </nav>
+    <main class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="h4 mb-3">Admin Login</h1>
+              <p class="text-muted">Enter your credentials to manage uploads and scan metadata.</p>
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label for="username" class="form-label">Username</label>
+                  <input type="text" id="username" class="form-control" placeholder="admin" required />
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label">Password</label>
+                  <input type="password" id="password" class="form-control" placeholder="password" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+              </form>
+              <div id="loginMessage" class="mt-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const form = document.getElementById('loginForm');
+      const message = document.getElementById('loginMessage');
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        message.textContent = 'Signing in...';
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        try {
+          const resp = await fetch('/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+          });
+          const body = await resp.json();
+          if (!resp.ok) throw body;
+          localStorage.setItem('projectplutonium_admin_token', body.token);
+          window.location.href = '/admin';
+        } catch (err) {
+          message.innerHTML = `<div class="alert alert-danger">Login failed: ${err.detail || JSON.stringify(err)}</div>`;
+        }
+      });
+    </script>
+  </body>
+</html>

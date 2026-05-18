@@ -1,0 +1,6 @@
+ssl/client.csr
+ssl/edge-key.pem
+ssl/client-key.pem
+ssl/edge.csr
+ssl/origin-key.pem
+ssl/origin.csr

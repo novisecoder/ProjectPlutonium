@@ -1,0 +1,36 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: projectplutonium
+build:
+  local:
+    push: false
+  artifacts:
+    - image: projectplutonium-scanner
+      context: .
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "**/*.py"
+            dest: /app
+          - src: "requirements.txt"
+            dest: /app
+          - src: "static/**"
+            dest: /app
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yaml
+    defaultNamespace: projectplutonium-dev
+portForward:
+  - resourceType: service
+    resourceName: scanner
+    namespace: projectplutonium-dev
+    port: 8080
+    localPort: 8080
+  - resourceType: service
+    resourceName: scanner
+    namespace: projectplutonium-dev
+    port: 5678
+    localPort: 5678

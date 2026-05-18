@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Attach to scanner pod",
+      "type": "python",
+      "request": "attach",
+      "preLaunchTask": "projectplutonium: start stack",
+      "connect": {
+        "host": "localhost",
+        "port": 5678
+      },
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}",
+          "remoteRoot": "/app"
+        }
+      ],
+      "postDebugTask": "open-browser"
+    }
+  ]
+}

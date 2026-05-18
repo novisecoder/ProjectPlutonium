@@ -1,0 +1,59 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "kind: create cluster",
+      "type": "shell",
+      "command": "kind create cluster --name projectplutonium --config kind-config.yaml",
+      "problemMatcher": []
+    },
+    {
+      "label": "kind: delete cluster",
+      "type": "shell",
+      "command": "kind delete cluster --name projectplutonium",
+      "problemMatcher": []
+    },
+    {
+      "label": "kubectl: use kind-projectplutonium context",
+      "type": "shell",
+      "command": "kubectl config use-context kind-projectplutonium",
+      "problemMatcher": []
+    },
+    {
+      "label": "projectplutonium: start stack",
+      "type": "shell",
+      "command": "echo Starting ProjectPlutonium development stack",
+      "dependsOn": [
+        "kubectl: use kind-projectplutonium context",
+        "skaffold: dev"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "skaffold: dev",
+      "type": "shell",
+      "command": "skaffold dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "owner": "skaffold",
+          "pattern": {
+            "regexp": "^$"
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".*",
+            "endsPattern": "^$"
+          }
+        }
+      ]
+    },
+    {
+      "label": "open-browser",
+      "type": "shell",
+      "command": "open http://localhost:8082",
+      "problemMatcher": []
+    }
+  ]
+}

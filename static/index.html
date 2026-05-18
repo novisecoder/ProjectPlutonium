@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ProjectPlutonium Scanner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">ProjectPlutonium</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#home">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#upload">Upload</a></li>
+            <li class="nav-item"><a class="nav-link" href="/gallery">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header id="home" class="bg-secondary text-white py-5">
+      <div class="container text-center">
+        <h1 class="display-5">Secure File Scanning & Object Storage Simulation</h1>
+        <p class="lead">Upload files, scan them for suspicious content, and store metadata in PostgreSQL.</p>
+      </div>
+    </header>
+
+    <section class="container my-5">
+      <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner rounded-4 shadow-sm">
+          <div class="carousel-item active">
+            <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80" class="d-block w-100" alt="Upload files">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
+              <h5>Upload Files</h5>
+              <p>Send any file through the scanner to store it in the simulated object storage.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80" class="d-block w-100" alt="Scan content">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
+              <h5>Simulated Scanning</h5>
+              <p>Review upload results with a basic scan engine powered by the scanner service.</p>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" class="d-block w-100" alt="PostgreSQL storage">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded-3 p-3">
+              <h5>PostgreSQL Storage</h5>
+              <p>Files are stored as objects in PostgreSQL, simulating object storage for the prototype.</p>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="upload" class="container mb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="card-title">Upload Files</h2>
+              <p class="card-text">Select one or more files to scan and store in the simulated object storage.</p>
+              <form id="uploadForm" enctype="multipart/form-data">
+                <div class="mb-3">
+                  <label class="form-label">Selected files</label>
+                  <div id="dropZone" class="border border-dashed rounded p-4 text-center bg-light" style="cursor: pointer;">
+                    <p class="mb-1"><strong>Drag files here</strong> or click Add files.</p>
+                    <p class="small text-muted mb-0">Supports multiple file selection. Use Command/Ctrl or Shift in the file picker, or drag multiple files in one action.</p>
+                  </div>
+                  <div class="d-flex gap-2 mb-3 mt-3">
+                    <button id="addFilesButton" type="button" class="btn btn-outline-secondary">Add files</button>
+                    <button id="clearFilesButton" type="button" class="btn btn-outline-danger">Clear selection</button>
+                  </div>
+                  <input id="file" name="files" type="file" class="form-control d-none" multiple />
+                  <div class="form-text">Add one or more files, then upload all selected files together.</div>
+                  <div id="selectedFilesInfo" class="form-text text-muted mt-2">No files selected</div>
+                  <ul id="selectedFilesList" class="list-group list-group-flush mt-2"></ul>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload & Scan</button>
+              </form>
+              <div id="result" class="mt-4 alert alert-secondary">No upload yet.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+      <div class="container text-center">
+        <p class="mb-1">ProjectPlutonium prototype</p>
+        <small>File scanning and storage simulation running in a Kubernetes-backed dev stack.</small>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const form = document.getElementById('uploadForm');
+      const result = document.getElementById('result');
+      const fileInput = document.getElementById('file');
+      const dropZone = document.getElementById('dropZone');
+      const addFilesButton = document.getElementById('addFilesButton');
+      const clearFilesButton = document.getElementById('clearFilesButton');
+      const selectedFilesInfo = document.getElementById('selectedFilesInfo');
+      const selectedFilesList = document.getElementById('selectedFilesList');
+
+      let selectedFiles = [];
+
+      const updateFileList = () => {
+        selectedFilesList.innerHTML = '';
+        if (selectedFiles.length === 0) {
+          selectedFilesInfo.textContent = 'No files selected';
+          return;
+        }
+        selectedFilesInfo.textContent = `${selectedFiles.length} file(s) selected`;
+        selectedFiles.forEach((file) => {
+          const item = document.createElement('li');
+          item.className = 'list-group-item py-1';
+          item.textContent = `${file.name} (${Math.round(file.size / 1024)} KB)`;
+          selectedFilesList.appendChild(item);
+        });
+      };
+
+      const appendFiles = (files) => {
+        const newFiles = Array.from(files).filter((file) =>
+          !selectedFiles.some((existing) => existing.name === file.name && existing.size === file.size)
+        );
+        if (newFiles.length === 0) {
+          return;
+        }
+        selectedFiles = selectedFiles.concat(newFiles);
+        updateFileList();
+      };
+
+      const clearSelection = () => {
+        selectedFiles = [];
+        fileInput.value = '';
+        updateFileList();
+      };
+
+      addFilesButton.addEventListener('click', () => fileInput.click());
+      clearFilesButton.addEventListener('click', clearSelection);
+
+      dropZone.addEventListener('click', () => fileInput.click());
+      dropZone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        dropZone.classList.add('border-primary', 'bg-white');
+      });
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-primary', 'bg-white');
+      });
+      dropZone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        dropZone.classList.remove('border-primary', 'bg-white');
+        if (event.dataTransfer?.files) {
+          appendFiles(event.dataTransfer.files);
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        if (fileInput.files) {
+          appendFiles(fileInput.files);
+          fileInput.value = '';
+        }
+      });
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (selectedFiles.length === 0) {
+          result.className = 'mt-4 alert alert-warning';
+          result.textContent = 'Please select at least one file before uploading.';
+          return;
+        }
+        const data = new FormData();
+        selectedFiles.forEach((file) => data.append('files', file));
+        result.className = 'mt-4 alert alert-info';
+        result.textContent = 'Uploading...';
+        try {
+          const resp = await fetch('/upload', { method: 'POST', body: data });
+          const contentType = resp.headers.get('content-type') || '';
+          let body;
+          if (contentType.includes('application/json')) {
+            body = await resp.json();
+          } else {
+            body = await resp.text();
+          }
+          if (!resp.ok) {
+            throw { status: resp.status, body };
+          }
+          clearSelection();
+          result.className = 'mt-4 alert alert-success';
+          if (Array.isArray(body.uploaded)) {
+            result.innerHTML = `
+              <strong>Upload successful</strong>
+              <p>${body.uploaded.length} file(s) uploaded:</p>
+              ${body.uploaded
+                .map(
+                  (item) => `
+                    <div class="border rounded p-2 mb-2">
+                      <strong>${item.filename}</strong><br>
+                      ID: ${item.id}<br>
+                      Scan result: ${item.scan_result}<br>
+                      Size: ${item.content_size} bytes
+                    </div>
+                  `
+                )
+                .join('')}
+            `;
+          } else {
+            result.innerHTML = `<strong>Upload successful</strong><br>ID: ${body.id}<br>Filename: ${body.filename}<br>Scan result: ${body.scan_result}<br>Size: ${body.content_size} bytes`;
+          }
+        } catch (err) {
+          const message = err?.body || err?.detail || err?.message || JSON.stringify(err);
+          result.className = 'mt-4 alert alert-danger';
+          result.innerHTML = `<strong>Error:</strong> ${typeof message === 'string' ? message : JSON.stringify(message)}`;
+        }
+      });
+    </script>
+  </body>
+</html>
